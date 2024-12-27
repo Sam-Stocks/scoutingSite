@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scouting</title>
+  <link rel="stylesheet" href="static\css\styles.css">
+</head>
+<body>
+
+  <div id="preMatch">
+    Pre-Match
+    <form id="preMatchForm" action="" method="post">
+      <div>
+        <p>Scouter Initials:</p>
+        <p>{{ preMatchForm.scouterInitials.label_tag }} {{ preMatchForm.scouterInitials }}</p>
+      </div>
+      <div>
+        <p>Team Number:</p>
+        <p>{{ preMatchForm.teamNumber.label_tag }} {{ preMatchForm.teamNumber }}</p>
+      </div>
+      <p>{{ preMatchForm.submit() }}</p>
+    </form>
+  </div>
+
+  <div id="auto">
+    Autonomous
+    <div id="autoForm">
+      <div>
+        <p>Auto Notes Scored</p>
+        <div id="upDownScore">
+          <button id="increaseAutoNote">+</button>
+          <span id="autoNotes">{{ autoNotes }}</span>
+          <button id="decreaseAutoNote">-</button>
+        </div>
+      </div>
+      <div>
+        <p>Auto Notes Missed</p>
+        <div id="upDownMissed">
+          <button id="increaseAutoNoteM">+</button>
+          <span id="autoNotesm">{{ autoNotesm }}</span>
+          <button id="decreaseAutoNoteM">-</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("increaseAutoNote").addEventListener("click", function() {
+      updateAutoNotes("increaseAutoNote");
+    });
+
+    document.getElementById("decreaseAutoNote").addEventListener("click", function() {
+      updateAutoNotes("decreaseAutoNote");
+    });
+
+    document.getElementById("increaseAutoNoteM").addEventListener("click", function() {
+      updateAutoNotes("increaseAutoNoteM");
+    });
+
+    document.getElementById("decreaseAutoNoteM").addEventListener("click", function() {
+      updateAutoNotes("decreaseAutoNotem");
+    });
+
+    function updateAutoNotes(action) {
+      fetch("/update_auto_notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ action: action })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("autoNotes").textContent = data.autoNotes;
+        document.getElementById("autoNotesm").textContent = data.autoNotesm;
+      });
+    }
+  </script>
+</body>
+</html>
+
